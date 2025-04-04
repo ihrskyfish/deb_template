@@ -1,0 +1,53 @@
+name: Build and Upload DEB Package
+
+on:
+  push:
+    branches:
+      - main  # 只在主分支推送时触发
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    name: Build DEB Package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up build environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential dpkg-dev devscripts dh-make fakeroot
+
+      - name: Create DEBIAN directory and control file
+        run: |
+          mkdir -p package/DEBIAN
+          cat <<EOF > package/DEBIAN/control
+          Package: myproject
+          Version: ${{ github.event.head_commit.message }}
+          Section: base
+          Priority: optional
+          Architecture: amd64
+          Maintainer: Your Name <your.email@example.com>
+          Description: A brief description of the project
+          EOF
+
+      - name: Build project
+        run: |
+          # 根据项目实际情况进行编译，例如：
+          make
+
+      - name: Copy build artifacts to package directory
+        run: |
+          mkdir -p package/usr/local/bin
+          cp bin/* package/usr/local/bin/
+
+      - name: Build DEB package
+        run: |
+          dpkg-deb --build package myproject.deb
+
+      - name: Upload DEB package to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: myproject.deb
