@@ -36,7 +36,7 @@ jobs:
       - name: Build project
         run: |
           # 根据项目实际情况进行编译，例如：
-          make
+          # make
 
       - name: Copy build artifacts to package directory
         run: |
