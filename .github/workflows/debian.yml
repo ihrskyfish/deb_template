@@ -47,12 +47,12 @@ jobs:
         run: |
           dpkg-deb --build package myproject.deb
       
-      - name: Create tag
-        id: create_tag
-        run: |
-          tag_name="v1.0.${{ github.run_number }}"
-          git tag $tag_name
-          git push origin $tag_name
+      # - name: Create tag
+      #   id: create_tag
+      #   run: |
+      #     tag_name="v1.0.${{ github.run_number }}"
+      #     git tag $tag_name
+      #     git push origin $tag_name
 
       - name: Upload DEB package to GitHub Releases
         uses: softprops/action-gh-release@v2
