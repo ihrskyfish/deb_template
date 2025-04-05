@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main  # 只在主分支推送时触发
+    tags:
+      - 'v*'  # 只在标签推送时触发
+  
   workflow_dispatch:  # 允许手动触发
 
 jobs:
@@ -56,6 +59,7 @@ jobs:
 
       - name: Upload DEB package to GitHub Releases
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
