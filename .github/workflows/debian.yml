@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main  # 只在主分支推送时触发
+      - "releases/**"
+
     tags:
       - 'v*'  # 只在标签推送时触发
   
@@ -58,10 +60,14 @@ jobs:
       #     git push origin $tag_name
 
       - name: Upload DEB package to GitHub Releases
+        id: new_release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           files: myproject.deb
+          name: latest
+          make_latest: true
+
           
