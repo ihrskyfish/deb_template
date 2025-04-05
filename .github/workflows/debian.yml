@@ -1,5 +1,11 @@
 name: Build and Upload DEB Package
 
+permissions:
+  contents: write  # 允许写入内容
+  packages: write  # 允许写入软件包
+  id-token: write  # 允许写入 ID Token
+  deployments: write  # 允许写入发布
+
 on:
   push:
     branches:
